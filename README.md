@@ -1,0 +1,1 @@
+# nvim-token-counter
