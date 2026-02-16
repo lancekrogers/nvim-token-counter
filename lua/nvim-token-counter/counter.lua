@@ -55,7 +55,19 @@ function M.count_async(bufnr, filepath, callback)
     on_exit = function(_, exit_code)
       M.pending_jobs[bufnr] = nil
 
+      -- Buffer may have been deleted while tcount was running
+      if not vim.api.nvim_buf_is_valid(bufnr) then
+        return
+      end
+
       if exit_code ~= 0 then
+        vim.schedule(function()
+          vim.notify(
+            "[nvim-token-counter] tcount failed (exit " .. exit_code .. "). Run :checkhealth nvim-token-counter",
+            vim.log.levels.WARN,
+            { once = true }
+          )
+        end)
         callback(nil)
         return
       end
@@ -65,14 +77,20 @@ function M.count_async(bufnr, filepath, callback)
       local ok, result = pcall(vim.json.decode, json_str)
 
       if not ok or not result then
+        vim.schedule(function()
+          vim.notify(
+            "[nvim-token-counter] Failed to parse tcount output",
+            vim.log.levels.WARN,
+            { once = true }
+          )
+        end)
         callback(nil)
         return
       end
 
       -- Extract token count from methods array
       local tokens = 0
-      if result.methods and #result.methods > 0 then
-        -- Use first method (the one matching --model)
+      if result.methods and type(result.methods) == "table" and #result.methods > 0 then
         tokens = result.methods[1].tokens or 0
       end
 

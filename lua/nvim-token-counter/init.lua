@@ -78,7 +78,7 @@ function M.lualine_component()
 end
 
 ---Get the lualine condition function
----@return boolean
+---@return function
 function M.lualine_cond()
   return require("nvim-token-counter.lualine").cond
 end
