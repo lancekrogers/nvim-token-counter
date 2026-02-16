@@ -1,12 +1,12 @@
--- nvim-token-counter: Display token counts in lualine using fest count
+-- nvim-token-counter: Display token counts in lualine using tcount
 -- Main entry point for the plugin
 
 local M = {}
 
 ---@class TokenCounterConfig
----@field model string Model for tokenization (default: "claude-3")
+---@field model string Model for tokenization (default: "claude-4.5-sonnet")
 ---@field icon string Icon to display (default: "󰊄")
----@field fest_path string Path to fest binary (default: "fest")
+---@field tcount_path string Path to tcount binary (default: "tcount")
 ---@field format string Display format (default: "%s %s")
 ---@field enabled boolean Enable/disable the plugin (default: true)
 ---@field filetypes_exclude string[] Filetypes to exclude from counting
@@ -17,10 +17,10 @@ function M.setup(opts)
   local config = require("nvim-token-counter.config")
   config.setup(opts)
 
-  -- Verify fest is available
-  if vim.fn.executable(config.options.fest_path) ~= 1 then
+  -- Verify tcount is available
+  if vim.fn.executable(config.options.tcount_path) ~= 1 then
     vim.notify(
-      "[nvim-token-counter] fest not found at: " .. config.options.fest_path,
+      "[nvim-token-counter] tcount not found. Install: brew install lancekrogers/tap/tcount",
       vim.log.levels.WARN
     )
     return

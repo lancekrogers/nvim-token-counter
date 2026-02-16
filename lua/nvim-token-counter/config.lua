@@ -2,17 +2,17 @@
 local M = {}
 
 ---@class TokenCounterConfig
----@field model string Model for tokenization (default: "claude-3")
+---@field model string Model for tokenization (default: "claude-4.5-sonnet")
 ---@field icon string Icon to display (default: "󰊄")
----@field fest_path string Path to fest binary (default: "fest")
+---@field tcount_path string Path to tcount binary (default: "tcount")
 ---@field format string Display format (default: "%s %s")
 ---@field enabled boolean Enable/disable the plugin (default: true)
 ---@field filetypes_exclude string[] Filetypes to exclude from counting
 
 M.defaults = {
-  model = "claude-3",
+  model = "claude-4.5-sonnet",
   icon = "󰊄",
-  fest_path = "fest",
+  tcount_path = "tcount",
   format = "%s %s", -- icon, formatted_count
   enabled = true,
   filetypes_exclude = {
@@ -38,18 +38,19 @@ M.options = {}
 function M.setup(opts)
   M.options = vim.tbl_deep_extend("force", {}, M.defaults, opts or {})
 
-  -- Auto-detect fest path if not explicitly set and not in PATH
-  if M.options.fest_path == "fest" then
-    local fest_in_path = vim.fn.executable("fest") == 1
-    if not fest_in_path then
+  -- Auto-detect tcount path if not explicitly set and not in PATH
+  if M.options.tcount_path == "tcount" then
+    local tcount_in_path = vim.fn.executable("tcount") == 1
+    if not tcount_in_path then
       local possible_paths = {
-        vim.fn.expand("~/go/bin/fest"),
-        "/usr/local/bin/fest",
-        vim.fn.expand("~/.local/bin/fest"),
+        "/opt/homebrew/bin/tcount",
+        "/usr/local/bin/tcount",
+        vim.fn.expand("~/go/bin/tcount"),
+        vim.fn.expand("~/.local/bin/tcount"),
       }
       for _, path in ipairs(possible_paths) do
         if vim.fn.executable(path) == 1 then
-          M.options.fest_path = path
+          M.options.tcount_path = path
           break
         end
       end

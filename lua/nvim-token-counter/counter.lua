@@ -22,7 +22,7 @@ function M.format_number(n)
   return formatted
 end
 
----Run fest count asynchronously for a buffer
+---Run tcount asynchronously for a buffer
 ---@param bufnr number Buffer number
 ---@param filepath string File path to count
 ---@param callback fun(result: CacheEntry|nil)
@@ -34,8 +34,7 @@ function M.count_async(bufnr, filepath, callback)
 
   local opts = config.options
   local cmd = {
-    opts.fest_path,
-    "count",
+    opts.tcount_path,
     "--json",
     "--model",
     opts.model,
