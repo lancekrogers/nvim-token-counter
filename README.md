@@ -2,6 +2,8 @@
 
 A Neovim plugin that displays token counts in your status line using [tcount](https://github.com/lancekrogers/go-token-counter), a fast zero-network token counter for LLM workflows.
 
+![nvim-token-counter](docs/images/nvim-token-counter.png)
+
 ## Features
 
 - Displays token count in lualine status line
