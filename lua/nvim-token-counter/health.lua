@@ -36,8 +36,8 @@ function M.check()
   else
     vim.health.error("tcount not found", {
       "Install via Homebrew: brew install lancekrogers/tap/tcount",
-      "Install via Go: go install github.com/lancekrogers/go-token-counter/cmd/tcount@latest",
-      "Or download from: https://github.com/lancekrogers/go-token-counter/releases",
+      "Install via Go: go install github.com/lancekrogers/tcount/cmd/tcount@latest",
+      "Or download from: https://github.com/lancekrogers/tcount/releases",
     })
   end
 

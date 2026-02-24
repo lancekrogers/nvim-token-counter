@@ -1,6 +1,6 @@
 # nvim-token-counter
 
-A Neovim plugin that displays token counts in your status line using [tcount](https://github.com/lancekrogers/go-token-counter), a fast zero-network token counter for LLM workflows.
+A Neovim plugin that displays token counts in your status line using [tcount](https://github.com/lancekrogers/tcount), a fast zero-network token counter for LLM workflows.
 
 ![nvim-token-counter](docs/images/nvim-token-counter.png)
 
@@ -18,7 +18,7 @@ A Neovim plugin that displays token counts in your status line using [tcount](ht
 
 - Neovim >= 0.9.0
 - [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim)
-- [tcount](https://github.com/lancekrogers/go-token-counter) installed and in PATH
+- [tcount](https://github.com/lancekrogers/tcount) installed and in PATH
 
 ## Installing tcount
 
@@ -33,18 +33,18 @@ brew install lancekrogers/tap/tcount
 ### Go Install
 
 ```bash
-go install github.com/lancekrogers/go-token-counter/cmd/tcount@latest
+go install github.com/lancekrogers/tcount/cmd/tcount@latest
 ```
 
 ### Pre-built Binaries
 
-Download from the [releases page](https://github.com/lancekrogers/go-token-counter/releases) for macOS, Linux, and Windows.
+Download from the [releases page](https://github.com/lancekrogers/tcount/releases) for macOS, Linux, and Windows.
 
 ### From Source
 
 ```bash
-git clone https://github.com/lancekrogers/go-token-counter.git
-cd go-token-counter
+git clone https://github.com/lancekrogers/tcount.git
+cd tcount
 go build -o bin/tcount ./cmd/tcount
 # Copy bin/tcount to somewhere in your PATH
 ```
