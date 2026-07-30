@@ -4,7 +4,7 @@
 local M = {}
 
 ---@class TokenCounterConfig
----@field model string Model for tokenization (default: "claude-4.5-sonnet")
+---@field model string Model for tokenization (default: "claude-sonnet-4.6")
 ---@field icon string Icon to display (default: "󰊄")
 ---@field tcount_path string Path to tcount binary (default: "tcount")
 ---@field format string Display format (default: "%s %s")
@@ -20,7 +20,7 @@ function M.setup(opts)
   -- Verify tcount is available
   if vim.fn.executable(config.options.tcount_path) ~= 1 then
     vim.notify(
-      "[nvim-token-counter] tcount not found. Install: brew install lancekrogers/tap/tcount",
+      "[nvim-token-counter] tcount not found. Install: npm i -g @obedience-corp/tcount  or  brew install lancekrogers/tap/tcount",
       vim.log.levels.WARN
     )
     return
