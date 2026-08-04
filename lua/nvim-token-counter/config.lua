@@ -2,7 +2,7 @@
 local M = {}
 
 ---@class TokenCounterConfig
----@field model string Model for tokenization (default: "claude-4.5-sonnet")
+---@field model string Model for tokenization (default: "claude-sonnet-4.6")
 ---@field icon string Icon to display (default: "󰊄")
 ---@field tcount_path string Path to tcount binary (default: "tcount")
 ---@field format string Display format (default: "%s %s")
@@ -10,7 +10,8 @@ local M = {}
 ---@field filetypes_exclude string[] Filetypes to exclude from counting
 
 M.defaults = {
-  model = "claude-4.5-sonnet",
+  -- Must match a tcount model id (see: tcount --models <file>)
+  model = "claude-sonnet-4.6",
   icon = "󰊄",
   tcount_path = "tcount",
   format = "%s %s", -- icon, formatted_count

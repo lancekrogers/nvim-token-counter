@@ -22,6 +22,45 @@ function M.format_number(n)
   return formatted
 end
 
+---Pick a token total from tcount --json methods.
+---When --model is recognized, tcount returns a single method for that model.
+---When the model is unknown, tcount returns multiple approximation methods;
+---prefer an exact method if present, else the first entry.
+---@param methods table|nil
+---@param model string|nil
+---@return number
+function M.extract_tokens(methods, model)
+  if not methods or type(methods) ~= "table" or #methods == 0 then
+    return 0
+  end
+
+  if model and model ~= "" then
+    local needle = model:lower():gsub("%-", "_")
+    for _, method in ipairs(methods) do
+      local name = (method.name or ""):lower()
+      local display = (method.display_name or ""):lower()
+      if name:find(needle, 1, true)
+        or display:find(model:lower(), 1, true)
+        or name:find(model:lower(), 1, true)
+      then
+        return method.tokens or 0
+      end
+    end
+  end
+
+  if #methods == 1 then
+    return methods[1].tokens or 0
+  end
+
+  for _, method in ipairs(methods) do
+    if method.is_exact then
+      return method.tokens or 0
+    end
+  end
+
+  return methods[1].tokens or 0
+end
+
 ---Run tcount asynchronously for a buffer
 ---@param bufnr number Buffer number
 ---@param filepath string File path to count
@@ -88,11 +127,9 @@ function M.count_async(bufnr, filepath, callback)
         return
       end
 
-      -- Extract token count from methods array
-      local tokens = 0
-      if result.methods and type(result.methods) == "table" and #result.methods > 0 then
-        tokens = result.methods[1].tokens or 0
-      end
+      -- Extract token count from methods array.
+      -- Prefer the method that matches --model; fall back to first method.
+      local tokens = M.extract_tokens(result.methods, opts.model)
 
       local cache_entry = {
         tokens = tokens,

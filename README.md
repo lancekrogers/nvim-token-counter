@@ -24,6 +24,16 @@ A Neovim plugin that displays token counts in your status line using [tcount](ht
 
 The plugin requires the `tcount` binary. Install it using one of these methods:
 
+### npm / pnpm / bun (macOS & Linux)
+
+```bash
+npm install -g @obedience-corp/tcount
+# or
+pnpm add -g @obedience-corp/tcount
+# or
+bun add -g @obedience-corp/tcount
+```
+
 ### Homebrew (macOS & Linux)
 
 ```bash
@@ -53,6 +63,8 @@ Verify the installation:
 
 ```bash
 tcount --help
+# list model ids accepted by --model
+tcount --models README.md
 ```
 
 ## Installation
@@ -69,7 +81,7 @@ return {
   event = "BufReadPost",
 
   opts = {
-    model = "claude-4.5-sonnet",  -- Tokenizer model
+    model = "claude-sonnet-4.6",  -- must match a tcount model id
     icon = "󰊄",                   -- Display icon (nerd font)
     tcount_path = "tcount",       -- Path to tcount binary (auto-detected)
   },
@@ -104,7 +116,7 @@ return {
     dependencies = { "nvim-lualine/lualine.nvim" },
     event = "BufReadPost",
     opts = {
-      model = "claude-4.5-sonnet",
+      model = "claude-sonnet-4.6",
       icon = "󰊄",
     },
   },
@@ -126,7 +138,7 @@ return {
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `model` | string | `"claude-4.5-sonnet"` | Tokenizer model (see supported models below) |
+| `model` | string | `"claude-sonnet-4.6"` | Tokenizer model id accepted by `tcount --model` |
 | `icon` | string | `"󰊄"` | Icon displayed before token count |
 | `tcount_path` | string | `"tcount"` | Path to tcount binary (auto-detected if in PATH) |
 | `format` | string | `"%s %s"` | Display format (icon, count) |
@@ -135,17 +147,30 @@ return {
 
 ### Supported Models
 
-**Anthropic:** `claude-4-opus`, `claude-4-sonnet`, `claude-4.5-sonnet`, `claude-3.7-sonnet`, `claude-3.5-sonnet`, `claude-3-opus`, `claude-3-sonnet`, `claude-3-haiku`
+Model ids must match [tcount](https://github.com/lancekrogers/tcount) exactly (run `tcount --models <file>` for the live list).
 
-**OpenAI:** `gpt-5`, `gpt-5-mini`, `gpt-4.1`, `gpt-4.1-mini`, `gpt-4.1-nano`, `gpt-4o`, `gpt-4o-mini`, `o3`, `o3-mini`, `o4-mini`, `gpt-4`, `gpt-4-turbo`, `gpt-3.5-turbo`
+**Anthropic** (approximation):
 
-**Meta:** `llama-3.1-8b`, `llama-3.1-70b`, `llama-3.1-405b`, `llama-4-scout`, `llama-4-maverick`
+- `claude-opus-4.6`, `claude-opus-4.5`, `claude-opus-4.1`, `claude-opus-4`, `claude-opus-3`
+- `claude-sonnet-4.6`, `claude-sonnet-4.5`, `claude-sonnet-4`
+- `claude-haiku-4.5`, `claude-haiku-3.5`, `claude-haiku-3`
 
-**DeepSeek:** `deepseek-v2`, `deepseek-v3`, `deepseek-coder-v2`
+**OpenAI** (exact BPE):
 
-**Qwen:** `qwen-2.5-7b`, `qwen-2.5-14b`, `qwen-2.5-72b`, `qwen-3-72b`
+- `gpt-5`, `gpt-5-mini`, `gpt-5-nano`, `gpt-5.1`, `gpt-5.2`
+- `gpt-4.1`, `gpt-4.1-mini`, `gpt-4.1-nano`
+- `gpt-4o`, `gpt-4o-mini`
+- `o3`, `o3-mini`, `o4-mini`
+- `gpt-4`, `gpt-4-turbo`, `gpt-3.5-turbo`
 
-**Phi:** `phi-3-mini`, `phi-3-small`, `phi-3-medium`
+**Meta / DeepSeek / Qwen / Phi** (BPE approximation via cl100k):
+
+- `llama-3.1-8b`, `llama-3.1-70b`, `llama-3.1-405b`, `llama-4-scout`, `llama-4-maverick`
+- `deepseek-v2`, `deepseek-v3`, `deepseek-coder-v2`
+- `qwen-2.5-7b`, `qwen-2.5-14b`, `qwen-2.5-72b`, `qwen-3-72b`
+- `phi-3-mini`, `phi-3-small`, `phi-3-medium`
+
+> **Note:** Older names like `claude-4.5-sonnet` are not valid tcount ids. Use `claude-sonnet-4.5` / `claude-sonnet-4.6` instead. Unknown models fall back to multi-method approximation counts.
 
 ## Commands
 
@@ -163,7 +188,7 @@ return {
 local tc = require("nvim-token-counter")
 
 -- Setup with options
-tc.setup({ model = "claude-4.5-sonnet", icon = "󰊄" })
+tc.setup({ model = "claude-sonnet-4.6", icon = "󰊄" })
 
 -- Get lualine component and condition functions
 tc.lualine_component()  -- Returns the component function
@@ -192,6 +217,8 @@ end
 3. Results are cached per-buffer until the next save
 4. The lualine component reads from cache and displays formatted count
 5. Cache is cleaned up when buffers are deleted
+
+Live directory progress in newer tcount releases does not affect this plugin: it always uses `--json` on a single file, so progress UI stays disabled.
 
 ## License
 

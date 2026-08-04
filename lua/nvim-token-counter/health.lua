@@ -35,6 +35,7 @@ function M.check()
     end
   else
     vim.health.error("tcount not found", {
+      "Install via npm: npm install -g @obedience-corp/tcount",
       "Install via Homebrew: brew install lancekrogers/tap/tcount",
       "Install via Go: go install github.com/lancekrogers/tcount/cmd/tcount@latest",
       "Or download from: https://github.com/lancekrogers/tcount/releases",
